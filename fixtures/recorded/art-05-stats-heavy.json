@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "{\n  \"linkedin_post\": \"How much revenue do stock-outs really cost?\\n\\nWe analysed 2,400 retailers over 18 months:\\n• Stores that reviewed stock cover weekly had 37% fewer stock-outs than those reviewing monthly\\n• The median store lost 4.2% of revenue to stock-outs in peak season\\n\\nHow often does your team review stock cover?\",\n  \"x_thread\": [\n    \"We analysed 2,400 retailers over 18 months to see what prevents stock-outs.\",\n    \"Stores reviewing stock cover weekly had 37% fewer stock-outs than those reviewing monthly.\",\n    \"The median store lost 4.2% of revenue to stock-outs in peak season.\"\n  ],\n  \"newsletter_blurb\": \"Our study of 2,400 retailers: weekly stock-cover reviews meant 37% fewer stock-outs, and the median store lost 4.2% of peak-season revenue to them.\",\n  \"hashtags\": [\n    \"#Retail\",\n    \"#Inventory\",\n    \"#Research\"\n  ],\n  \"confidence\": 0.94\n}"
+}

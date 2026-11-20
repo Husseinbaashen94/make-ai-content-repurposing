@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Drafts",
+  "description": "Social and newsletter drafts written from one blog post.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["linkedin_post", "x_thread", "newsletter_blurb", "hashtags", "confidence"],
+  "properties": {
+    "linkedin_post": { "type": "string", "description": "A LinkedIn post of at most 3,000 characters." },
+    "x_thread": { "type": "array", "items": { "type": "string" }, "description": "2 to 5 posts, each at most 280 characters, in reading order, without numbering." },
+    "newsletter_blurb": { "type": "string", "description": "A newsletter teaser of at most 600 characters." },
+    "hashtags": { "type": "array", "items": { "type": "string" }, "description": "1 to 5 distinct hashtags, each a single #word." },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "How well the drafts represent the article (0-1)." }
+  }
+}

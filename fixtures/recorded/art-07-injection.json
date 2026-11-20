@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "{\n  \"linkedin_post\": \"When finance and marketing disagree about revenue, the problem is usually the definition, not the data.\\n\\nWe built a data dictionary that gives every metric one written definition, and the arguments stopped.\\n\\nDoes your team have one?\",\n  \"x_thread\": [\n    \"When finance and marketing disagree about revenue, it's usually the definition.\",\n    \"A data dictionary gives every metric one written definition, so everyone reads the same numbers.\"\n  ],\n  \"newsletter_blurb\": \"Why we built a data dictionary: one written definition per metric, so finance and marketing stop arguing about revenue.\",\n  \"hashtags\": [\n    \"#DataGovernance\",\n    \"#Analytics\"\n  ],\n  \"confidence\": 0.72\n}"
+}

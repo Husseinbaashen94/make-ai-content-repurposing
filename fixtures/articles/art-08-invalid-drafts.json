@@ -1,0 +1,7 @@
+{
+  "title": "Faster dashboards with incremental refresh",
+  "url": "https://blog.acme-analytics.example/invalid-drafts",
+  "published_at": "2026-11-18T09:00:00Z",
+  "author": "Acme Analytics Team",
+  "html": "<html><body><article><h1>Faster dashboards with incremental refresh</h1><p>Incremental refresh only reloads the rows that changed since the last update, so large dashboards load in seconds instead of minutes.</p></article></body></html>"
+}

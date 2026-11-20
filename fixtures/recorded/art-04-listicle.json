@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "Here are the drafts:\n{\n  \"linkedin_post\": \"If you run an online store, these 5 dashboards answer most of the questions you ask every week:\\n\\n• Margin by product\\n• Repeat purchase rate\\n• Stock cover in days\\n• Return reasons\\n• Marketing spend versus revenue by channel\\n\\nWhich one is missing from your setup?\",\n  \"x_thread\": [\n    \"5 dashboards every e-commerce team needs:\",\n    \"Margin by product, repeat purchase rate and stock cover in days.\",\n    \"Return reasons and marketing spend versus revenue by channel.\"\n  ],\n  \"newsletter_blurb\": \"Five dashboards that answer most weekly e-commerce questions, from margin by product to marketing spend versus revenue by channel.\",\n  \"hashtags\": [\n    \"#Ecommerce\",\n    \"#Dashboards\"\n  ],\n  \"confidence\": 0.91\n}"
+}

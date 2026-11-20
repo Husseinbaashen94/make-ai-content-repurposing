@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "{\n  \"linkedin_post\": \"¿Qué productos financian tu crecimiento y cuáles lo frenan?\\n\\nEl margen por producto te lo dice. Empieza por los 20 productos con más ventas y compara su margen con la media.\\n\\n¿Cuál te sorprendería?\",\n  \"x_thread\": [\n    \"El margen por producto muestra qué artículos financian tu crecimiento y cuáles lo frenan.\",\n    \"Empieza por los 20 productos con más ventas y compara su margen con la media.\"\n  ],\n  \"newsletter_blurb\": \"Aprende a leer el margen por producto: empieza por tus 20 productos con más ventas y compáralos con la media.\",\n  \"hashtags\": [\n    \"#Ecommerce\",\n    \"#Márgenes\"\n  ],\n  \"confidence\": 0.9\n}"
+}

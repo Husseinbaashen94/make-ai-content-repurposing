@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "{\n  \"linkedin_post\": \"Monday reporting shouldn't eat your morning.\\n\\nScheduled reports are now live in Acme Analytics: send any dashboard as a PDF or CSV daily, weekly or monthly.\\n\\nIn the beta, 120 teams replaced manual Monday reporting and saved an average of 3 hours a week.\\n\\nSet it up from any dashboard: Share → Schedule. Which report would you automate first?\",\n  \"x_thread\": [\n    \"Scheduled reports are live: send any dashboard as a PDF or CSV daily, weekly or monthly.\",\n    \"In our beta, 120 teams replaced manual Monday reporting and saved an average of 3 hours a week.\",\n    \"Try it from any dashboard: Share → Schedule.\"\n  ],\n  \"newsletter_blurb\": \"New: scheduled reports. Send any dashboard as a PDF or CSV on a daily, weekly or monthly schedule. Beta teams saved an average of 3 hours a week.\",\n  \"hashtags\": [\n    \"#Analytics\",\n    \"#Reporting\",\n    \"#ProductUpdate\"\n  ],\n  \"confidence\": 0.93\n}"
+}

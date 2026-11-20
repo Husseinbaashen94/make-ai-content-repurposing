@@ -1,0 +1,7 @@
+{
+  "title": "Scheduled reports are here",
+  "url": "https://blog.acme-analytics.example/product-update",
+  "published_at": "2026-11-18T09:00:00Z",
+  "author": "Acme Analytics Team",
+  "html": "<html><body><article><h1>Scheduled reports are here</h1><p>You can now send any dashboard as a PDF or CSV on a schedule: daily, weekly or monthly.</p><p>In our beta, 120 teams replaced manual Monday reporting and saved an average of 3 hours a week.</p><p>Set it up from any dashboard: Share → Schedule.</p></article></body></html>"
+}

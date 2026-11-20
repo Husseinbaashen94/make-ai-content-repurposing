@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "```json\n{\n  \"linkedin_post\": \"Most dashboard arguments aren't about numbers. They're about definitions.\\n\\nOur new guide walks through modelling sales data so every report agrees:\\n• Pick one clear grain per table: one row per order, customer or day\\n• Name tables after what a row represents\\n• Keep raw data untouched and build clean models on top\\n\\nWhat's the definition your team argues about most?\",\n  \"x_thread\": [\n    \"Most dashboard arguments are about definitions, not numbers. Here's how to model sales data so reports agree.\",\n    \"Start with a clear grain: one row per order, per customer or per day. Never mix them in one table.\",\n    \"Keep raw data untouched and build clean models on top, so every dashboard reads from the same definitions.\"\n  ],\n  \"newsletter_blurb\": \"Why do two dashboards show different revenue? Usually the data model. Our complete guide covers grain, naming and layered models so every report agrees.\",\n  \"hashtags\": [\n    \"#DataModeling\",\n    \"#Analytics\"\n  ],\n  \"confidence\": 0.88\n}\n```"
+}

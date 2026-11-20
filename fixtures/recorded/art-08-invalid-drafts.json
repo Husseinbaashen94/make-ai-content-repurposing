@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "{\n  \"linkedin_post\": \"Incremental refresh reloads only the rows that changed, and our customers' dashboards grew 300% faster.\\n\\nWhat would you do with that time?\",\n  \"x_thread\": [\n    \"Dashboards that load in seconds, not minutes: meet incremental refresh.\",\n    \"Incremental refresh only reloads the rows that changed since the last update, so large dashboards load in seconds instead of minutes. Incremental refresh only reloads the rows that changed since the last update, so large dashboards load in seconds instead of minutes. Incremental refresh o.\"\n  ],\n  \"newsletter_blurb\": \"Incremental refresh reloads only the rows that changed, so large dashboards load in seconds.\",\n  \"hashtags\": [\n    \"#AI\",\n    \"#ai\",\n    \"#Dashboards\"\n  ],\n  \"confidence\": 0.8\n}"
+}

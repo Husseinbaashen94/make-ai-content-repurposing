@@ -1,0 +1,38 @@
+{
+  "art-01-product-update": {
+    "valid": true,
+    "problems": []
+  },
+  "art-02-long-guide": {
+    "valid": true,
+    "problems": []
+  },
+  "art-03-code-tutorial": {
+    "valid": true,
+    "problems": []
+  },
+  "art-04-listicle": {
+    "valid": true,
+    "problems": []
+  },
+  "art-05-stats-heavy": {
+    "valid": true,
+    "problems": []
+  },
+  "art-06-spanish": {
+    "valid": true,
+    "problems": []
+  },
+  "art-07-injection": {
+    "valid": true,
+    "problems": []
+  },
+  "art-08-invalid-drafts": {
+    "valid": false,
+    "problems": [
+      "x_thread post 2 is 290 characters (max 280)",
+      "duplicate hashtag #ai",
+      "number not in the article: 300"
+    ]
+  }
+}

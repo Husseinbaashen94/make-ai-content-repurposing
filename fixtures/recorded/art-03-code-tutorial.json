@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "model": "claude-opus-5-5",
+  "text": "{\n  \"linkedin_post\": \"Need a metric inside your own app or script? Every Acme Analytics dashboard tile is available as JSON through the metrics API.\\n\\nOur new tutorial shows a working Python example in 10 lines, and responses are cached for 60 seconds, so polling is safe.\\n\\nWhat would you build with it?\",\n  \"x_thread\": [\n    \"Every dashboard tile is available as JSON through our metrics API.\",\n    \"New tutorial: query it from Python in 10 lines with requests.\",\n    \"Responses are cached for 60 seconds, so you can poll safely.\"\n  ],\n  \"newsletter_blurb\": \"Developers: pull any dashboard metric into your own tools. Our new tutorial queries the metrics API from Python in 10 lines.\",\n  \"hashtags\": [\n    \"#Python\",\n    \"#API\",\n    \"#DataEngineering\"\n  ],\n  \"confidence\": 0.9\n}"
+}

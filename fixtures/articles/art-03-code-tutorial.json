@@ -1,0 +1,7 @@
+{
+  "title": "Query your metrics API in 10 lines of Python",
+  "url": "https://blog.acme-analytics.example/code-tutorial",
+  "published_at": "2026-11-18T09:00:00Z",
+  "author": "Acme Analytics Team",
+  "html": "<html><body><article><h1>Query your metrics API in 10 lines of Python</h1><p>Our metrics API returns any dashboard tile as JSON.</p><pre><code>import requests\nr = requests.get('https://api.acme-analytics.example/v1/metrics/revenue', headers={'Authorization': 'Bearer TOKEN'})\nprint(r.json()['value'])</code></pre><p>Responses are cached for 60 seconds, so you can poll safely.</p></article></body></html>"
+}
