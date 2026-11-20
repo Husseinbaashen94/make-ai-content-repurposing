@@ -29,7 +29,7 @@
       "module": "http:ActionSendData",
       "version": 3,
       "parameters": {
-        "handleErrors": false,
+        "handleErrors": true,
         "useNewZLibDeCompress": true
       },
       "mapper": {
@@ -56,7 +56,45 @@
           "x": 300,
           "y": 0
         }
-      }
+      },
+      "onerror": [
+        {
+          "id": 13,
+          "module": "google-email:ActionSendEmail",
+          "version": 2,
+          "parameters": {},
+          "mapper": {
+            "to": [
+              "marketing@your-company.example"
+            ],
+            "cc": [],
+            "bcc": [],
+            "from": "",
+            "subject": "Could not read the post \"{{1.title}}\"",
+            "html": "<p>The page <a href=\"{{1.url}}\">{{1.title}}</a> could not be fetched (status {{2.statusCode}}), so no drafts were written.</p><p>Error: {{2.error.message}}</p>",
+            "attachments": []
+          },
+          "metadata": {
+            "designer": {
+              "x": 300,
+              "y": 300
+            }
+          }
+        },
+        {
+          "id": 14,
+          "module": "builtin:Ignore",
+          "version": 1,
+          "parameters": {},
+          "mapper": null,
+          "metadata": {
+            "designer": {
+              "x": 600,
+              "y": 300
+            }
+          }
+        }
+      ]
     },
     {
       "id": 3,
@@ -216,8 +254,18 @@
                   [
                     {
                       "a": "{{length(5.linkedin_post)}}",
+                      "b": "1",
+                      "o": "number:greaterorequal"
+                    },
+                    {
+                      "a": "{{length(5.linkedin_post)}}",
                       "b": "3000",
                       "o": "number:lessorequal"
+                    },
+                    {
+                      "a": "{{length(5.newsletter_blurb)}}",
+                      "b": "1",
+                      "o": "number:greaterorequal"
                     },
                     {
                       "a": "{{length(5.newsletter_blurb)}}",
@@ -235,27 +283,27 @@
                       "o": "number:lessorequal"
                     },
                     {
-                      "a": "{{length(get(5.x_thread; 1))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 1); \"\"))}}",
                       "b": "280",
                       "o": "number:lessorequal"
                     },
                     {
-                      "a": "{{length(get(5.x_thread; 2))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 2); \"\"))}}",
                       "b": "280",
                       "o": "number:lessorequal"
                     },
                     {
-                      "a": "{{length(get(5.x_thread; 3))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 3); \"\"))}}",
                       "b": "280",
                       "o": "number:lessorequal"
                     },
                     {
-                      "a": "{{length(get(5.x_thread; 4))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 4); \"\"))}}",
                       "b": "280",
                       "o": "number:lessorequal"
                     },
                     {
-                      "a": "{{length(get(5.x_thread; 5))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 5); \"\"))}}",
                       "b": "280",
                       "o": "number:lessorequal"
                     },
@@ -332,8 +380,22 @@
                   [
                     {
                       "a": "{{length(5.linkedin_post)}}",
+                      "b": "1",
+                      "o": "number:less"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{length(5.linkedin_post)}}",
                       "b": "3000",
                       "o": "number:greater"
+                    }
+                  ],
+                  [
+                    {
+                      "a": "{{length(5.newsletter_blurb)}}",
+                      "b": "1",
+                      "o": "number:less"
                     }
                   ],
                   [
@@ -359,35 +421,35 @@
                   ],
                   [
                     {
-                      "a": "{{length(get(5.x_thread; 1))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 1); \"\"))}}",
                       "b": "280",
                       "o": "number:greater"
                     }
                   ],
                   [
                     {
-                      "a": "{{length(get(5.x_thread; 2))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 2); \"\"))}}",
                       "b": "280",
                       "o": "number:greater"
                     }
                   ],
                   [
                     {
-                      "a": "{{length(get(5.x_thread; 3))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 3); \"\"))}}",
                       "b": "280",
                       "o": "number:greater"
                     }
                   ],
                   [
                     {
-                      "a": "{{length(get(5.x_thread; 4))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 4); \"\"))}}",
                       "b": "280",
                       "o": "number:greater"
                     }
                   ],
                   [
                     {
-                      "a": "{{length(get(5.x_thread; 5))}}",
+                      "a": "{{length(ifempty(get(5.x_thread; 5); \"\"))}}",
                       "b": "280",
                       "o": "number:greater"
                     }

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { articleText, buildMakeStyleRequest, buildRepurposeRequest, renderSystemPrompt, renderUserContent } from '../../src/request.js';
+import { articleText, buildMakeStyleRequest, buildRepurposeRequest, promptText, renderSystemPrompt, renderUserContent } from '../../src/request.js';
 import { LIMITS } from '../../src/validate.js';
 import type { Article } from '../../src/types.js';
 
@@ -23,8 +23,9 @@ describe('requests', () => {
     expect(buildRepurposeRequest(product).headers['anthropic-beta']).toBe('server-side-fallback-2026-07-01');
   });
 
-  it('Make-style variant (what the scenario sends): no structured output', () => {
-    expect(body(buildMakeStyleRequest(product)).output_config).toEqual({ effort: 'medium' });
+  it("Make-style variant sends only what Make's Claude module sends: model, max_tokens, system, messages", () => {
+    expect(Object.keys(buildMakeStyleRequest(product).body).sort()).toEqual(['max_tokens', 'messages', 'model', 'system']);
+    expect(buildMakeStyleRequest(product).headers).not.toHaveProperty('anthropic-beta');
     expect(body(buildMakeStyleRequest(product, { model: 'claude-sonnet-5-5' })).model).toBe('claude-sonnet-5-5');
   });
 
@@ -90,3 +91,11 @@ describe('article rendering', () => {
     expect(content.match(/<\/article>/g)).toHaveLength(1);
   });
 });
+
+describe('promptText (the text Claude actually sees)', () => {
+  it(`is the article text cut at ${LIMITS.articleChars} characters`, () => {
+    expect([...promptText(longGuide)].length).toBe(LIMITS.articleChars);
+    expect(promptText(product)).toBe(articleText(product));
+  });
+});
+

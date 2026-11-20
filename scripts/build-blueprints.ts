@@ -51,11 +51,14 @@ const ignore = (id: number, x: number, y: number): Json => ({ id, module: 'built
 function draftChecks(p: number): Condition[] {
   const len = (expr: string) => `{{length(${expr})}}`;
   return [
+    { a: len(`${p}.linkedin_post`), b: '1', o: 'number:greaterorequal' },
     { a: len(`${p}.linkedin_post`), b: String(LIMITS.linkedin), o: 'number:lessorequal' },
+    { a: len(`${p}.newsletter_blurb`), b: '1', o: 'number:greaterorequal' },
     { a: len(`${p}.newsletter_blurb`), b: String(LIMITS.newsletter), o: 'number:lessorequal' },
     { a: len(`${p}.x_thread`), b: String(LIMITS.xPostsMin), o: 'number:greaterorequal' },
     { a: len(`${p}.x_thread`), b: String(LIMITS.xPostsMax), o: 'number:lessorequal' },
-    ...Array.from({ length: LIMITS.xPostsMax }, (_, i) => ({ a: len(`get(${p}.x_thread; ${i + 1})`), b: String(LIMITS.xPost), o: 'number:lessorequal' })),
+    // A thread may have fewer posts than the maximum: ifempty() turns a missing post into "" (length 0).
+    ...Array.from({ length: LIMITS.xPostsMax }, (_, i) => ({ a: len(`ifempty(get(${p}.x_thread; ${i + 1}); "")`), b: String(LIMITS.xPost), o: 'number:lessorequal' })),
     { a: len(`${p}.hashtags`), b: String(LIMITS.hashtagsMin), o: 'number:greaterorequal' },
     { a: len(`${p}.hashtags`), b: String(LIMITS.hashtagsMax), o: 'number:lessorequal' },
   ];
@@ -95,9 +98,14 @@ export function buildRepurposeScenario(): Json {
         id: 2,
         module: 'http:ActionSendData',
         version: 3,
-        parameters: { handleErrors: false, useNewZLibDeCompress: true },
+        // handleErrors: a 4xx/5xx page (blocked, missing) is an error, not text to draft from.
+        parameters: { handleErrors: true, useNewZLibDeCompress: true },
         mapper: { url: '{{1.url}}', method: 'get', serializeUrl: false, headers: [], qs: [], bodyType: '', parseResponse: false, timeout: '20', followRedirect: true, gzip: true, rejectUnauthorized: true, shareCookies: false, useQuerystring: false, useMtls: false, ca: '', authUser: '', authPass: '' },
         metadata: at(300, 0),
+        onerror: [
+          marketerEmail(13, 300, 300, 'Could not read the post "{{1.title}}"', '<p>The page <a href="{{1.url}}">{{1.title}}</a> could not be fetched (status {{2.statusCode}}), so no drafts were written.</p><p>Error: {{2.error.message}}</p>'),
+          ignore(14, 600, 300),
+        ],
       },
       {
         id: 3,
@@ -204,7 +212,8 @@ export function buildApprovedScenario(): Json {
         module: 'google-sheets:filterRows',
         version: 2,
         parameters: {},
-        mapper: { from: 'drive', spreadsheetId: '', sheetId: 'Drafts', includesHeaders: true, tableFirstRow: 'A1:I1', sortOrder: 'asc', valueRenderOption: 'FORMATTED_VALUE', dateTimeRenderOption: 'FORMATTED_STRING' },
+        // Ask Sheets for approved rows only (column A), so a long sheet can't push them past the row limit.
+        mapper: { from: 'drive', spreadsheetId: '', sheetId: 'Drafts', includesHeaders: true, tableFirstRow: 'A1:I1', filter: [[{ a: 'A', b: 'approved', o: 'text:equal:ci' }]], sortOrder: 'asc', valueRenderOption: 'FORMATTED_VALUE', dateTimeRenderOption: 'FORMATTED_STRING' },
         metadata: at(0, 0),
       },
       {

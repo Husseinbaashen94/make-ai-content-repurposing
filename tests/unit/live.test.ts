@@ -5,12 +5,12 @@ import { answerText, hasAnthropicCredentials, repurposeLive } from '../../src/li
 const article = JSON.parse(readFileSync('fixtures/articles/art-01-product-update.json', 'utf8'));
 
 describe('repurposeLive', () => {
-  it('sends what the Make scenario sends (no structured output), with the fallback beta', async () => {
+  it('sends exactly what Make\'s Claude module sends, through the standard endpoint', async () => {
     let sent: Record<string, unknown> | undefined;
-    const client = { beta: { messages: { create: async (p: Record<string, unknown>) => ((sent = p), { stop_reason: 'end_turn', content: [] }) } } };
+    const client = { messages: { create: async (p: Record<string, unknown>) => ((sent = p), { stop_reason: 'end_turn', content: [] }) } };
     await repurposeLive(client as never, article);
-    expect(sent).toMatchObject({ model: 'claude-opus-5-5', fallbacks: 'default', betas: ['server-side-fallback-2026-07-01'], output_config: { effort: 'medium' } });
-    expect((sent!.output_config as Record<string, unknown>).format).toBeUndefined();
+    expect(Object.keys(sent!).sort()).toEqual(['max_tokens', 'messages', 'model', 'system']);
+    expect(sent!.model).toBe('claude-opus-5-5');
     expect((sent!.messages as { content: string }[])[0].content).toContain('120 teams');
   });
 });

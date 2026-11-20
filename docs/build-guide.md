@@ -44,8 +44,8 @@ New drafts arrive with status `pending`. To approve one, change its status to **
 
 What happens to each post:
 - **Drafts within every platform limit** (LinkedIn ≤ 3,000 characters, newsletter ≤ 600, 2–5 X posts of ≤ 280 each, 1–5 hashtags) → a new row in `Drafts`.
-- **Drafts that break a limit** → an email to the marketer with the drafts, so nothing is lost.
-- **Claude errors, or a reply that isn't JSON** → an email to the marketer, and the scenario keeps going.
+- **Drafts that break a limit, or come back empty** → an email to the marketer with the drafts.
+- **An article page that can't be fetched, a Claude error, or a reply that isn't JSON** → an email to the marketer, and the scenario keeps going with the next post.
 
 ## 3. Import scenario 2: send approved posts
 
@@ -72,6 +72,10 @@ These points come from real exported blueprints, but check them once in your acc
 - [ ] **Router filters (7, 8):** the conditions reference the parsed fields (`linkedin_post`, `x_thread`, `newsletter_blurb`, `hashtags`). After the first **Run once**, Make knows the parsed structure and shows them by name.
 - [ ] **RSS (1):** the item fields `title`, `url`, `author` and `dateCreated` exist in your feed's output.
 - [ ] **Sheets update (scenario 2, module 3):** the row number maps to the row found in module 1 (`Row number`).
+- [ ] **Short threads pass:** run once with a post whose X thread has 2–3 parts and confirm it reaches the `Drafts` sheet, not the "needs a rewrite" email. The filter reads a missing 4th or 5th post as empty text via `ifempty(get(…); "")`. If Make treats it differently, every normal thread would be emailed back.
+- [ ] **Broken pages are reported:** point the RSS step at a feed with a post whose URL returns 404, and confirm the marketer gets "Could not read the post", with no drafts written from an error page.
+- [ ] **The page arrives as text:** in the HTTP step's output, `Data` should be the page's HTML text. If it shows as a binary buffer, turn on **Parse response**.
+- [ ] **Approved rows:** in scenario 2, module 1's filter asks Google Sheets for rows where column A is `approved`. Check it's shown as a filter in the module's settings.
 - [ ] If Make reports a module version mismatch on import, recreate that module with the same settings. The blueprint JSON shows every field.
 
 Once this checklist passes, change the README status to **verified in Make**.

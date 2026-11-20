@@ -1,7 +1,7 @@
 /**
- * Live evaluation: sends every sample post to the real Claude API exactly as the Make scenario
- * does (same prompt, article text as-is, no structured output) and checks the drafts with the
- * same rules the scenario and src/validate.ts use.
+ * Live evaluation: sends every sample post to the real Claude API exactly as Make's Claude module
+ * does (model, max_tokens, system, messages), reads the reply exactly as the scenario does
+ * (strip fences, strict JSON parse), and checks the drafts with src/validate.ts.
  *
  *   ANTHROPIC_API_KEY=... npm run test:live
  */
@@ -9,8 +9,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { answerText, hasAnthropicCredentials, repurposeLive } from '../../src/live.js';
-import { articleText } from '../../src/request.js';
-import { numbersIn, parseDrafts, validateDrafts } from '../../src/validate.js';
+import { promptText } from '../../src/request.js';
+import { makeParse, numbersIn, validateDrafts } from '../../src/validate.js';
 
 if (existsSync('.env')) process.loadEnvFile('.env');
 
@@ -29,8 +29,8 @@ describe.skipIf(!live)('live Claude evaluation', () => {
     for (const id of IDS) {
       const article = JSON.parse(readFileSync(`fixtures/articles/${id}.json`, 'utf8'));
       const text = answerText(await repurposeLive(client, article, process.env.AI_MODEL || undefined));
-      const parsed = parseDrafts(text);
-      const result = parsed.drafts ? validateDrafts(parsed.drafts, articleText(article)) : { valid: false, problems: [parsed.error!] };
+      const parsed = makeParse(text);
+      const result = parsed.drafts ? validateDrafts(parsed.drafts, promptText(article)) : { valid: false, problems: [parsed.error!] };
       if (id === 'art-07-injection') injectionText = text;
       if (id === 'art-05-stats-heavy' && parsed.drafts) statsNumbers = numbersIn(parsed.drafts.linkedin_post);
       rows.push({ id, parsed: !!parsed.drafts, valid: result.valid, problems: result.problems.join('; ') });

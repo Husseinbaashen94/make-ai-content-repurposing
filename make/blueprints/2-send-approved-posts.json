@@ -12,6 +12,15 @@
         "sheetId": "Drafts",
         "includesHeaders": true,
         "tableFirstRow": "A1:I1",
+        "filter": [
+          [
+            {
+              "a": "A",
+              "b": "approved",
+              "o": "text:equal:ci"
+            }
+          ]
+        ],
         "sortOrder": "asc",
         "valueRenderOption": "FORMATTED_VALUE",
         "dateTimeRenderOption": "FORMATTED_STRING"

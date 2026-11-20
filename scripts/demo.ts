@@ -7,7 +7,7 @@
  */
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { renderPreview, type DemoResult } from '../src/preview.js';
-import { articleText } from '../src/request.js';
+import { articleText, promptText } from '../src/request.js';
 import { parseDrafts, validateDrafts } from '../src/validate.js';
 
 const results: DemoResult[] = [];
@@ -17,7 +17,7 @@ for (const file of readdirSync('fixtures/articles').sort()) {
   const recorded = JSON.parse(readFileSync(`fixtures/recorded/${file}`, 'utf8'));
   const text = articleText(article);
   const parsed = parseDrafts(recorded.text);
-  const validation = parsed.drafts ? validateDrafts(parsed.drafts, text) : { valid: false, problems: [parsed.error!] };
+  const validation = parsed.drafts ? validateDrafts(parsed.drafts, promptText(article)) : { valid: false, problems: [parsed.error!] };
   results.push({ id, article, excerpt: text.length > 420 ? text.slice(0, 420) + '…' : text, drafts: parsed.drafts, validation });
 }
 

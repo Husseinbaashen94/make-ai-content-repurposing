@@ -144,3 +144,31 @@ describe('scenario 2: send approved posts', () => {
     expect(approved.flow[2].mapper!.values).toEqual({ '0': 'ready' });
   });
 });
+
+describe('final review fixes', () => {
+  const router = find(repurpose, 'builtin:BasicRouter');
+  const good = router.routes![0].flow[0];
+
+  it('rejects an empty or missing LinkedIn post or newsletter blurb, like the mirror', () => {
+    const checks = good.filter!.conditions[0];
+    for (const field of ['linkedin_post', 'newsletter_blurb']) {
+      expect(checks).toContainEqual({ a: `{{length(5.${field})}}`, b: '1', o: 'number:greaterorequal' });
+    }
+  });
+
+  it('reads a missing thread post as empty text, so short threads are not rejected', () => {
+    const xChecks = good.filter!.conditions[0].filter((c) => c.a.includes('get('));
+    for (const c of xChecks) expect(c.a).toMatch(/^\{\{length\(ifempty\(get\(5\.x_thread; \d\); ""\)\)\}\}$/);
+  });
+
+  it('treats a failed page fetch as an error and emails the marketer instead of drafting from an error page', () => {
+    const fetch = find(repurpose, 'http:ActionSendData');
+    expect(fetch.parameters).toMatchObject({ handleErrors: true });
+    expect(fetch.onerror?.map((h) => h.module)).toEqual(['google-email:ActionSendEmail', 'builtin:Ignore']);
+  });
+
+  it('scenario 2 asks Google Sheets for approved rows only, so a long sheet cannot hide them', () => {
+    expect(approved.flow[0].mapper!.filter).toEqual([[{ a: 'A', b: 'approved', o: 'text:equal:ci' }]]);
+  });
+});
+

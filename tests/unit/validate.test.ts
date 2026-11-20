@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { articleText } from '../../src/request.js';
-import { LIMITS, parseDrafts, validateDrafts } from '../../src/validate.js';
+import { promptText } from '../../src/request.js';
+import { LIMITS, makeParse, parseDrafts, validateDrafts } from '../../src/validate.js';
 import type { Drafts } from '../../src/types.js';
 
 const readJson = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
@@ -22,7 +22,7 @@ describe('every recorded fixture', () => {
     const article = readJson(`fixtures/articles/${id}.json`);
     const parsed = parseDrafts(readJson(`fixtures/recorded/${id}.json`).text);
     expect(parsed.error).toBeUndefined();
-    expect(validateDrafts(parsed.drafts!, articleText(article))).toEqual(expected[id]);
+    expect(validateDrafts(parsed.drafts!, promptText(article))).toEqual(expected[id]);
   });
 
   it('the injection article drafts never contain the injected link', () => {
@@ -97,6 +97,26 @@ describe('no invented numbers', () => {
     ]);
   });
 
+  /** Drafts whose only numbers are in the LinkedIn post, to test number matching in isolation. */
+  const only = (linkedin_post: string) => ({ ...good, linkedin_post, x_thread: ['a', 'b'], newsletter_blurb: 'n' });
+
+  it('matches a leading-dot decimal (.5) with 0.5', () => {
+    expect(validateDrafts(only('Down by .5 points.'), 'It fell 0.5 points.').problems).toEqual([]);
+  });
+
+  it('reads decimal commas (10,5 %) as decimals, not as 105', () => {
+    expect(validateDrafts(only('Subió un 10.5 %.'), 'Las ventas subieron un 10,5 %.').problems).toEqual([]);
+    expect(validateDrafts(only('Subió un 105 %.'), 'Las ventas subieron un 10,5 %.').problems).toEqual(['number not in the article: 105']);
+  });
+
+  it('splits comma-separated lists (2023,2024) into separate numbers', () => {
+    expect(validateDrafts(only('In 2024.'), 'Years 2023,2024 were strong.').problems).toEqual([]);
+  });
+
+  it('reads European thousands (1.234,56) and English thousands (1,234.56) as the same number', () => {
+    expect(validateDrafts(only('1,234.56 euros'), 'Total 1.234,56 €').problems).toEqual([]);
+  });
+
   it('ignores digits inside hashtags and URLs', () => {
     expect(problemsOf({ hashtags: ['#Web3'], linkedin_post: 'Read more: https://example.com/post-77' })).toEqual([]);
   });
@@ -116,3 +136,20 @@ describe('parseDrafts', () => {
     expect(result.error).toMatch(/not valid JSON|wrong shape/);
   });
 });
+
+describe('makeParse (exactly what the Make scenario does: strip ```json and ```, trim, strict parse)', () => {
+  const json = JSON.stringify(good);
+
+  it('accepts a fenced block', () => {
+    expect(makeParse('```json\n' + json + '\n```').drafts).toEqual(good);
+  });
+
+  it('rejects prose around the JSON, as Make does', () => {
+    expect(makeParse('Here you go:\n' + json).error).toBe('AI answer is not valid JSON');
+  });
+
+  it('never throws', () => {
+    for (const text of ['', 'null', '{"a"']) expect(makeParse(text).drafts).toBeUndefined();
+  });
+});
+

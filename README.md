@@ -28,7 +28,7 @@ flowchart LR
 - **Your brand voice:** written to the rules in `config/brand-voice.md`, in the article's own language.
 - **Facts only from the article:** Claude is told to use only the article's facts and numbers, and drafts that break a platform limit never reach the sheet.
 - **A human approves everything:** drafts wait in a Google Sheet. Mark one `approved` and it arrives in Slack, formatted and ready to post.
-- **Nothing gets lost:** if Claude fails or its drafts break a limit, the marketer gets an email instead.
+- **Failures reach a person:** if the article page can't be fetched, Claude fails, its reply isn't valid JSON, or its drafts break a limit (including an empty post), the marketer gets an email instead of a broken row.
 
 ![Demo output: each blog post next to its drafts](docs/images/preview.png)
 
@@ -60,20 +60,20 @@ It writes `out/preview.html`, the side-by-side page shown above.
 
 ## Proven by tests
 
-Make can't run in CI, so **101 automated tests** cover what the scenarios are made of. Here's exactly what that means:
+Make can't run in CI, so **113 automated tests** cover what the scenarios are made of. Here's exactly what that means:
 
 | Layer | Tests | What they prove |
 |---|---|---|
-| **Validation rules** | 30 | Every platform limit at its boundary (280/281, 3,000/3,001, 600/601), thread and hashtag counts, duplicate hashtags, **numbers that aren't in the article**, and reading Claude's reply when it's fenced, wrapped in prose or broken, without ever crashing |
-| **Blueprints** | 21 | Every module and version comes from real exported Make blueprints, every field mapping reads from an earlier step on the same path, and the prompt and limits inside the blueprints equal the tested ones. The bad-drafts route is the exact opposite of the good route, and AI text is written to the sheet as raw text (never a formula) |
-| **Prompt & request** | 12 | Brand voice and limits are in the prompt, the article sits in a data block, long articles are cut at 15,000 characters with a visible marker, and the live evaluation sends exactly what Make's Claude module sends |
+| **Validation rules** | 37 | Every platform limit at its boundary (280/281, 3,000/3,001, 600/601), thread and hashtag counts, duplicate hashtags, **new or rounded numbers that aren't in the article** (thousands, decimal commas and lists read correctly), and reading Claude's reply both the way Make does (strip fences, strict parse) and leniently, without ever crashing |
+| **Blueprints** | 25 | Every module and version comes from real exported Make blueprints, every field mapping reads from an earlier step on the same path, and the prompt and limits inside the blueprints equal the tested ones. The bad-drafts route is the exact opposite of the good route, empty drafts are rejected, a failed page fetch emails the marketer, approved rows are fetched server-side, and AI text is written to the sheet as raw text (never a formula) |
+| **Prompt & request** | 13 | Brand voice and limits are in the prompt, the article sits in a data block, long articles are cut at 15,000 characters with a visible marker, and the live evaluation sends exactly the fields Make's Claude module sends (model, max_tokens, system, messages) |
 | **Contracts, demo & docs** | 38 | Sample data and schema stay valid, the preview is correct, the guide's sheet columns match the blueprints, and the declared Node version matches what the tools need |
 
-**Mutation-checked:** wiring a step to read from a later module fails the wiring test, removing a platform limit from the blueprint fails 2 tests, and disabling the invented-number rule fails 4.
+**Mutation-checked:** wiring a step to read from a later module fails the wiring test, removing a platform limit from the blueprint fails 2 tests, and disabling the invented-number rule fails 5.
 
-**What runs where:** Make's filters enforce every **limit**. Duplicate hashtags and invented numbers can't be checked by a Make filter: there, the prompt instructs Claude, this repo's validator measures how well it complies, and the marketer's approval is the final check.
+**What runs where:** Make's filters enforce every **limit**, and reject empty drafts. Duplicate hashtags, hashtag format and invented numbers can't be checked by a Make filter: there, the prompt instructs Claude, this repo's validator measures how well it complies, and the marketer's approval is the final check. The number check compares numbers, not their context, so a small number such as "3" passes whenever a 3 appears anywhere in the article: it catches new and rounded figures, not every misuse. Character counts: this repo counts each emoji as 1 character, while Make (and X) most likely count it as 2, so Make may reject an emoji-heavy post that the demo accepts.
 
-**Live AI evaluation:** `npm run test:live` sends all 8 posts to the real Claude API exactly as the scenario does and checks the drafts: every answer must parse, the article's injected spam link must never appear, the study's numbers must survive, and at least 7 of 8 must pass validation. The answers used by the demo and tests are hand-written (`"synthetic": true` in `fixtures/recorded/`) until replaced by real ones with `npm run record`.
+**Live AI evaluation:** `npm run test:live` sends all 8 posts to the real Claude API with exactly the fields Make's module sends, reads each reply exactly as the scenario does (strip fences, strict JSON parse), and checks the drafts: every answer must parse, the article's injected spam link must never appear, the study's numbers must survive, and at least 7 of 8 must pass validation. The answers used by the demo and tests are hand-written (`"synthetic": true` in `fixtures/recorded/`) until replaced by real ones with `npm run record`.
 
 > **Status:** validation, prompt, blueprints and demo are tested in CI. The blueprints are **structure-checked; pending an import test in Make**.
 
@@ -133,7 +133,7 @@ Empty values use the default. `.env` is git-ignored, so nothing you put in it is
 
 ```bash
 npm run demo               # the 2-minute demo
-npm test                   # all 101 tests (no network)
+npm test                   # all 113 tests (no network)
 npm run test:live          # live Claude evaluation (needs ANTHROPIC_API_KEY)
 npm run build:blueprints   # regenerate make/blueprints/ after editing the prompt or limits
 npm run typecheck

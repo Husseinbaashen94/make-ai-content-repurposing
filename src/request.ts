@@ -60,6 +60,9 @@ function layout(article: Article, text: string): string {
 const truncate = (text: string) =>
   [...text].length > LIMITS.articleChars ? [...text].slice(0, LIMITS.articleChars).join('') + '\n[truncated]' : text;
 
+/** The article text Claude actually sees: cut at LIMITS.articleChars (without the marker). */
+export const promptText = (article: Article): string => [...articleText(article)].slice(0, LIMITS.articleChars).join('');
+
 const escapeTags = (text: string) => text.replace(/<(\/?)article>/gi, '&lt;$1article&gt;');
 
 /** User message built by this repo: article text escaped and cut at LIMITS.articleChars. */
@@ -92,17 +95,14 @@ export function buildRepurposeRequest(article: Article, opts: { model?: string }
 }
 
 /**
- * What scenario 1 sends through Make's Anthropic Claude module: the same prompt, the article text
- * inserted as-is (HTML to text, then substring to LIMITS.articleChars), and no structured output.
- * The live evaluation uses this, so its results describe the real scenario.
+ * Exactly what scenario 1 sends through Make's Anthropic Claude module: model, max_tokens, system
+ * and the user message (article text inserted as-is, cut at LIMITS.articleChars). The module can't
+ * set effort, structured output or the refusal fallback, so this request doesn't either. The live
+ * evaluation uses it, so its results describe the real scenario.
  */
 export function buildMakeStyleRequest(article: Article, opts: { model?: string } = {}): RepurposeRequest {
   return {
-    headers: { ...ANTHROPIC_HEADERS },
-    body: {
-      ...baseBody(article, opts.model, layout(article, truncate(articleText(article)))),
-      output_config: { effort: 'medium' },
-      fallbacks: 'default',
-    },
+    headers: { 'anthropic-version': ANTHROPIC_HEADERS['anthropic-version'], 'content-type': 'application/json' },
+    body: baseBody(article, opts.model, layout(article, truncate(articleText(article)))),
   };
 }
