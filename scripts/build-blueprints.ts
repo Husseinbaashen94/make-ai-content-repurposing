@@ -11,6 +11,9 @@ import { LIMITS } from '../src/validate.js';
 
 export const BLUEPRINT_FILES = ['1-repurpose-new-posts.json', '2-send-approved-posts.json'] as const;
 
+/** Columns of the "Drafts" sheet, in order (A…I). Scenario 1 writes them; scenario 2 reads them by index. */
+export const DRAFTS_COLUMNS = ['status', 'title', 'url', 'linkedin_post', 'x_thread', 'newsletter_blurb', 'hashtags', 'confidence', 'created_at'] as const;
+
 type Condition = { a: string; b: string; o: string };
 type Json = Record<string, unknown>;
 
