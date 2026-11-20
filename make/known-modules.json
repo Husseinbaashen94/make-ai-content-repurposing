@@ -1,0 +1,17 @@
+{
+  "source": "Module identifiers and versions seen in real exported Make.com blueprints in public GitHub repositories, collected on 2026-11-20 (18 exported blueprints for most modules; 10 for anthropic-claude:createAMessage). Unversioned entries were ignored as likely hand-written. A module version may still change after import; see docs/build-guide.md.",
+  "modules": [
+    { "module": "rss:ActionReadArticles", "version": 4 },
+    { "module": "http:ActionSendData", "version": 3 },
+    { "module": "regexp:HTMLToText", "version": 1 },
+    { "module": "anthropic-claude:createAMessage", "version": 1 },
+    { "module": "json:ParseJSON", "version": 1 },
+    { "module": "builtin:BasicRouter", "version": 1 },
+    { "module": "google-sheets:addRow", "version": 2 },
+    { "module": "google-sheets:filterRows", "version": 2 },
+    { "module": "google-sheets:updateRow", "version": 2 },
+    { "module": "slack:CreateMessage", "version": 4 },
+    { "module": "google-email:ActionSendEmail", "version": 2 },
+    { "module": "builtin:Ignore", "version": 1 }
+  ]
+}
